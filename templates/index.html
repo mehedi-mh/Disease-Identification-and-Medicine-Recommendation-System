@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Disease Identification</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <style>
+      .logo {
+        width: 50px;
+        height: 50px;
+        color: black;
+        margin-top: 0;
+        margin-left: 2px;
+      }
+      .myimg {
+        width: 50px;
+        height: 50px;
+        border: 2px solid black;
+        border-radius: 25px;
+      }
+      /* Animation for typing effect */
+      @keyframes typing {
+        0% {
+          width: 0;
+        }
+        100% {
+          width: 100%;
+        }
+      }
+      
+      #descriptionText {
+        overflow: hidden; /* Hide the text until it's revealed */
+        white-space: nowrap;
+        width: 0;
+        animation: typing 5s steps(50) 1s forwards, blink 0.75s step-end infinite;
+      }
+      
+      /* Blinking cursor effect */
+      @keyframes blink {
+        0%,
+        100% {
+          border-color: transparent;
+        }
+        50% {
+          border-color: black;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="w-5/6 mt-2 mx-auto text-center relative bg-white bg-opacity-20 border-2 border-blue-400 backdrop-blur-md rounded-lg shadow-lg px-6">
+      <h1 class="text-2xl font-bold py-4">Disease Identification and Medicine Recommendation System</h1>
+      <div class="flex flex-row h-screen border-2 border-blue-200 backdrop-blur-md rounded-lg shadow-lg">
+        <!-- Left Section -->
+        <div class="w-1/4 bg-white p-6 shadow-md">
+          <div class="">
+            {% if predicted_disease %}
+              <div class="bg-blue-100 p-4 rounded-lg shadow-md text-center">
+                <h2 class="text-lg font-bold text-gray-700 border">Predicted Disease</h2>
+                <div class="mt-4 text-center">
+                  <p id="predictedDisease" class="text-gray-600 font-bold t-center">{{ predicted_disease }}</p>
+                </div>
+              </div>
+              <div class="mt-6">
+                <div class="">
+                  <ul>
+                    <li class="mt-2">
+                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('disease')">Disease</button>
+                    </li>
+
+                    <li class="mt-2">
+                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('description')">Description</button>
+                    </li>
+
+                    <li class="mt-2">
+                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('medications')">Medications</button>
+                    </li>
+
+                    <li class="mt-2">
+                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('precaution')">Precautions</button>
+                    </li>
+
+                    <li class="mt-2">
+                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('diets')">Diets</button>
+                    </li>
+
+                    <li class="mt-2">
+                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('workouts')">Workouts</button>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Hidden Data Containers -->
+                <div id="data-containers" style="display: none;">
+                  <div id="disease">{{ predicted_disease }}</div>
+                  <div id="description">{{ dis_des }}</div>
+                  <div id="precaution">
+                    <ul>
+                      {% for i in my_precautions %}
+                        <li>{{ i }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div id="medications">
+                    <ul>
+                      {% for i in medications %}
+                        <li>{{ i }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div id="workouts">
+                    <ul>
+                      {% for i in workout %}
+                        <li>{{ i }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  <div id="diets">
+                    <ul>
+                      {% for i in my_diet %}
+                        <li>{{ i }}</li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="w-3/4 bg-gray-50 p-6">
+          <!-- Search Bar -->
+          <div class="bg-white p-5 w-full rounded-full border-2 border-gray-200">
+            <form action="/predict" method="post" class="flex bg-white rounded-full border-2 border-gray-200" onsubmit="return validateForm(event)">
+              <span class="pl-4 pt-2 text-gray-600"><i class="fas fa-search"></i></span>
+              <input type="text" id="symptoms" name="symptoms" placeholder="Type symptoms such as itching, aching, etc." class="form-control w-full bg-transparent border-none focus:ring-0 text-gray-600 z-10 px-4" onkeyup="showSuggestions()" />
+              <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-r-full z-10 hover:bg-gray-800 transform transition duration-200 hover:scale-105">Predict</button>
+            </form>
+            <div class="w-1/2 relative">
+              <ul id="suggestions" class="text-left pl-4 absolute bg-white border border-gray-300 rounded-lg mt-2 hidden w-full max-h-48 overflow-auto"></ul>
+            </div>
+          </div>
+
+          <div>
+            {% if predicted_disease %}
+              <h2 class="text-xl font-bold mb-4"></h2>
+              <p class="text-red-600 font-bold">
+                <span>Predicted Disease :</span>{{ predicted_disease }}
+              </p>
+            {% else %}
+              <p class="text-gray-600"></p>
+            {% endif %}
+          </div>
+
+          <!-- Description Box -->
+          <div class="">
+            <div class="bg-white p-6 mt-6 shadow-md rounded-lg h-[70vh] overflow-auto" id="descriptionBox">
+              <div>
+                <p id="descriptionText" class="mt-4 text-gray-600 text-left break-words whitespace-pre-wrap"></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Options Box -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const symptomsData = ['itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills', 'joint_pain', 'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting', 'burning_micturition', 'spotting_urination', 'fatigue', 'weight_gain', 'anxiety', 'cold_hands_and_feets', 'mood_swings', 'weight_loss', 'restlessness', 'lethargy', 'patches_in_throat', 'irregular_sugar_level', 'cough', 'high_fever', 'sunken_eyes', 'breathlessness', 'sweating', 'dehydration', 'indigestion', 'headache', 'yellowish_skin', 'dark_urine', 'nausea', 'loss_of_appetite', 'pain_behind_the_eyes', 'back_pain', 'constipation', 'abdominal_pain', 'diarrhoea', 'mild_fever', 'yellow_urine', 'yellowing_of_eyes', 'acute_liver_failure', 'fluid_overload', 'swelling_of_stomach', 'swelled_lymph_nodes', 'malaise', 'blurred_and_distorted_vision', 'phlegm', 'throat_irritation', 'redness_of_eyes', 'sinus_pressure', 'runny_nose', 'congestion', 'chest_pain', 'weakness_in_limbs', 'fast_heart_rate', 'pain_during_bowel_movements', 'pain_in_anal_region', 'bloody_stool', 'irritation_in_anus', 'neck_pain', 'dizziness', 'cramps', 'bruising', 'obesity', 'swollen_legs', 'swollen_blood_vessels', 'puffy_face_and_eyes', 'enlarged_thyroid', 'brittle_nails', 'swollen_extremeties', 'excessive_hunger', 'extra_marital_contacts', 'drying_and_tingling_lips', 'slurred_speech', 'knee_pain', 'hip_joint_pain', 'muscle_weakness', 'stiff_neck', 'swelling_joints', 'movement_stiffness', 'spinning_movements', 'loss_of_balance', 'unsteadiness', 'weakness_of_one_body_side', 'loss_of_smell', 'bladder_discomfort', 'foul_smell_ofurine', 'continuous_feel_of_urine', 'passage_of_gases', 'internal_itching', 'toxic_look_(typhos)', 'depression', 'irritability', 'muscle_pain', 'altered_sensorium', 'red_spots_over_body', 'belly_pain', 'abnormal_menstruation', 'dischromic_patches', 'watering_from_eyes', 'increased_appetite', 'polyuria', 'family_history', 'mucoid_sputum', 'rusty_sputum', 'lack_of_concentration', 'visual_disturbances', 'receiving_blood_transfusion', 'receiving_unsterile_injections', 'coma', 'stomach_bleeding', 'distention_of_abdomen', 'history_of_alcohol_consumption', 'fluid_overload', 'blood_in_sputum', 'prominent_veins_on_calf', 'palpitations', 'painful_walking', 'pus_filled_pimples', 'blackheads', 'scurring', 'skin_peeling', 'silver_like_dusting', 'small_dents_in_nails', 'inflammatory_nails', 'blister', 'red_sore_around_nose', 'yellow_crust_ooze', 'prognosis']
+      
+      function showSuggestions() {
+        const input = document.getElementById('symptoms').value.toLowerCase()
+        const suggestionsList = document.getElementById('suggestions')
+        suggestionsList.innerHTML = ''
+      
+        if (input === '') {
+          suggestionsList.style.display = 'none'
+          return
+        }
+      
+        const matchingSymptoms = symptomsData.filter((symptom) => symptom.toLowerCase().includes(input))
+      
+        matchingSymptoms.slice(0, 8).forEach((symptom) => {
+          const li = document.createElement('li')
+          li.textContent = symptom
+          li.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer')
+          li.onclick = () => {
+            document.getElementById('symptoms').value = symptom
+            suggestionsList.style.display = 'none'
+          }
+          suggestionsList.appendChild(li)
+        })
+      
+        suggestionsList.style.display = 'block'
+      }
+      
+      function updateDescription(key) {
+        const content = document.getElementById(key)?.innerHTML || 'Content not available.'
+        const descriptionText = document.getElementById('descriptionText')
+      
+        // Clear existing text and reset the animation
+        descriptionText.innerHTML = ''
+        descriptionText.style.width = '0'
+      
+        // Set new content and restart animation
+        descriptionText.innerHTML = content
+        descriptionText.style.animation = 'none'
+        descriptionText.offsetHeight // Trigger reflow to restart animation
+        descriptionText.style.animation = 'typing 2s steps(100) 0.05s forwards, blink 0.75s step-end infinite'
+      }
+      let colors = ['text-red-500', 'text-black']
+      let currentColorIndex = 0
+      
+      function changeColor() {
+        const textElement = document.getElementById('predictedDisease')
+        // Remove the current color class
+        textElement.classList.remove(colors[currentColorIndex])
+      
+        // Move to the next color
+        currentColorIndex = (currentColorIndex + 1) % colors.length
+      
+        // Add the new color class
+        textElement.classList.add(colors[currentColorIndex])
+      }
+      
+      // Change color every 1 second (1000 milliseconds)
+      setInterval(changeColor, 1200)
+      
+      function validateForm(event) {
+        const input = document.getElementById('symptoms').value.trim()
+        if (input === '') {
+          alert('Please enter symptoms before submitting.')
+          return false // Prevent form submission
+        }
+        return true // Allow form submission
+      }
+    </script>
+  </body>
+</html>
