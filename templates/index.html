@@ -50,44 +50,44 @@
     </style>
   </head>
   <body>
-    <div class="w-5/6 mt-2 mx-auto text-center relative bg-white bg-opacity-20 border-2 border-blue-400 backdrop-blur-md rounded-lg shadow-lg px-6">
+    <div class="w-5/6 mt-2 mx-auto text-center relative bg-white bg-opacity-20 border-2 border-blue-400 backdrop-blur-md rounded-lg shadow-lg px-6"style="background-image: url('./static/m1.jpg'); background-size: cover; background-position:center;">
       <h1 class="text-2xl font-bold py-4">Disease Identification and Medicine Recommendation System</h1>
       <div class="flex flex-row h-screen border-2 border-blue-200 backdrop-blur-md rounded-lg shadow-lg">
         <!-- Left Section -->
-        <div class="w-1/4 bg-white p-6 shadow-md">
+        <div class="w-1/4  p-6 shadow-md">
           <div class="">
             {% if predicted_disease %}
-              <div class="bg-blue-100 p-4 rounded-lg shadow-md text-center">
-                <h2 class="text-lg font-bold text-gray-700 border">Predicted Disease</h2>
+            <div class="bg-blue-400 p-4 rounded-lg shadow-md text-center">
+                <h4 class=" font-bold text-black ">Predicted Disease</h4>
                 <div class="mt-4 text-center">
-                  <p id="predictedDisease" class="text-gray-600 font-bold t-center">{{ predicted_disease }}</p>
+                  <p id="predictedDisease" class="text-black font-bold t-center">{{ predicted_disease }}</p>
                 </div>
               </div>
               <div class="mt-6">
                 <div class="">
                   <ul>
                     <li class="mt-2">
-                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('disease')">Disease</button>
+                      <button class="font-bold bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition duration-300" onclick="updateDescription('disease')">Disease</button>
                     </li>
 
                     <li class="mt-2">
-                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('description')">Description</button>
+                      <button class="font-bold bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition duration-300" onclick="updateDescription('description')">Description</button>
                     </li>
 
                     <li class="mt-2">
-                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('medications')">Medications</button>
+                      <button class="font-bold bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition duration-300" onclick="updateDescription('medications')">Medications</button>
                     </li>
 
                     <li class="mt-2">
-                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('precaution')">Precautions</button>
+                      <button class="font-bold bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition duration-300" onclick="updateDescription('precaution')">Precautions</button>
                     </li>
 
                     <li class="mt-2">
-                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('diets')">Diets</button>
+                      <button class="font-bold bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition duration-300" onclick="updateDescription('diets')">Diets</button>
                     </li>
 
                     <li class="mt-2">
-                      <button class="bg-gray-500 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-700 transition duration-300" onclick="updateDescription('workouts')">Workouts</button>
+                      <button class="font-bold bg-blue-600 text-white px-4 py-2 rounded-lg w-full hover:bg-green-600 transition duration-300" onclick="updateDescription('workouts')">Workouts</button>
                     </li>
                   </ul>
                 </div>
@@ -131,13 +131,13 @@
         </div>
 
         <!-- Right Section -->
-        <div class="w-3/4 bg-gray-50 p-6">
+        <div class="w-3/4 bg-gray-50 p-6" style="background-image: url('./static/m1.jpg'); background-size: cover; background-position: center;">
           <!-- Search Bar -->
           <div class="bg-white p-5 w-full rounded-full border-2 border-gray-200">
             <form action="/predict" method="post" class="flex bg-white rounded-full border-2 border-gray-200" onsubmit="return validateForm(event)">
-              <span class="pl-4 pt-2 text-gray-600"><i class="fas fa-search"></i></span>
-              <input type="text" id="symptoms" name="symptoms" placeholder="Type symptoms such as itching, aching, etc." class="form-control w-full bg-transparent border-none focus:ring-0 text-gray-600 z-10 px-4" onkeyup="showSuggestions()" />
-              <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-r-full z-10 hover:bg-gray-800 transform transition duration-200 hover:scale-105">Predict</button>
+              <span class="pl-4 pt-2 text-black"><i class="fas fa-search"></i></span>
+              <input type="text" id="symptoms" name="symptoms" placeholder="Type symptoms such as itching, aching, etc." class="form-control w-full bg-transparent border-none focus:ring-0 text-black z-10 px-4" onkeyup="showSuggestions()" />
+              <button type="submit" class="bg-blue-700 text-white font-bold px-4 py-2 rounded-r-full z-10 hover:bg-green-600 transform transition duration-200 hover:scale-105">Predict</button>
             </form>
             <div class="w-1/2 relative">
               <ul id="suggestions" class="text-left pl-4 absolute bg-white border border-gray-300 rounded-lg mt-2 hidden w-full max-h-48 overflow-auto"></ul>
@@ -147,19 +147,19 @@
           <div>
             {% if predicted_disease %}
               <h2 class="text-xl font-bold mb-4"></h2>
-              <p class="text-red-600 font-bold">
-                <span>Predicted Disease :</span>{{ predicted_disease }}
+              <p class="text-white font-bold">
+                <span>Predicted Disease : </span>{{ predicted_disease }}
               </p>
             {% else %}
-              <p class="text-gray-600"></p>
+              <p class="text-black"></p>
             {% endif %}
           </div>
 
           <!-- Description Box -->
           <div class="">
-            <div class="bg-white p-6 mt-6 shadow-md rounded-lg h-[70vh] overflow-auto" id="descriptionBox">
+            <div class="bg-white p-6 mt-6 shadow-md rounded-lg h-[70vh] overflow-auto" id="descriptionBox"style="background-image: url('./static/m1.jpg'); background-size: cover; background-position: center;">
               <div>
-                <p id="descriptionText" class="mt-4 text-gray-600 text-left break-words whitespace-pre-wrap"></p>
+                <p id="descriptionText" class="mt-4 text-black font-bold text-left break-words whitespace-pre-wrap"></p>
               </div>
             </div>
           </div>
